@@ -1,4 +1,5 @@
 import pygame
+import random
 
 pygame.init()
 
@@ -17,6 +18,11 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
 
+def gen(num):
+    return set([(random.randrange(0, GRID_HEIGHT),
+                 random.randrange(0, GRID_WIDTH)) for _ in range(num)])
+
+
 def draw_grid(positions):
     for position in positions:
         col, row = position
@@ -33,6 +39,7 @@ def draw_grid(positions):
 
 def main():
     running = True
+    playing = False
 
     possitions = set()
     possitions.add((10, 10))
@@ -54,6 +61,17 @@ def main():
                     possitions.remove(pos)
                 else:
                     possitions.add(pos)
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    playing = not playing
+
+                if event.type == pygame.K_c:
+                    possitions = set()
+                    playing = False
+
+                if event.type == pygame.K_g:
+                    possitions = gen(random.randrange(2, 5) * GRID_WIDTH)
 
         screen.fill(GREY)
         draw_grid(possitions)
